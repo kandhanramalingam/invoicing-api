@@ -1,0 +1,49 @@
+plugins {
+	id 'java'
+	id 'war'
+	id 'org.springframework.boot' version '3.4.2'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.frudev'
+version = '0.0.1'
+description = 'Demo project for Spring Boot'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	/* ===== Spring Core ===== */
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	/* ===== REQUIRED for Audit (AOP) ===== */
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+	/* ===== JSON (Audit old/new values) ===== */
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	/* ===== Security / JWT ===== */
+	implementation 'org.springframework.security:spring-security-crypto'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+	/* ===== Database ===== */
+	runtimeOnly 'org.postgresql:postgresql'
+
+	/* ===== MapStruct ===== */
+	implementation 'org.mapstruct:mapstruct:1.6.2'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
+
+	/* ===== WAR / External Tomcat ===== */
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+}
