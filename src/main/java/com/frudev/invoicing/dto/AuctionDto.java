@@ -1,0 +1,39 @@
+package com.frudev.invoicing.dto;
+
+import java.time.LocalDateTime;
+
+public record AuctionDto(
+        Long id,
+        String nameOfAuction,
+        String dateOfAuction,
+        String address1,
+        String address2,
+        String address3,
+        String gpsCord1,
+        String gpsCord2,
+        String website,
+        String aucCategoryName,
+        Integer aucCategoryId,
+        String layout,
+        String sellerName,
+        String auctioneerName,
+        String logoName,
+        String sellerLogo,
+        String map,
+        String termsCondition,
+        String appLogo,
+        String sellerHpLogo,
+        String catalog,
+        String exportCatalogue,
+        String openDate,
+        String closeDate,
+        String lockReg,
+        LocalDateTime createdDate,
+        String status,
+        String removeStatus,
+        String archiveStatus,
+        String interval,
+        String rejectBid,
+        String mobRejectBid,
+        String transaction
+) {}
