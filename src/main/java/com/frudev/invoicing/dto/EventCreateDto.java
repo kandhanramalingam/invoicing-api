@@ -4,9 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record EventCreateDto(
-        String name,
+        Long auctionId,
         String description,
-        LocalDateTime date,
         String location,
         String type,
         String status,

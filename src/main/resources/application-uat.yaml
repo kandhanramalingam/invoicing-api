@@ -8,17 +8,19 @@ spring:
     name: InvoicingSystem
 
   datasource:
-    url: jdbc:postgresql://145.223.22.133:5432/invoicing_db
+    url: jdbc:mysql://145.223.22.133:3306/invoicing_db
     username: invoicing_db_user
     password: 123!@#123Aa
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
+        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   web:
     error:
       whitelabel:

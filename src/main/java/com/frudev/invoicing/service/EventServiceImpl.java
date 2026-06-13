@@ -1,8 +1,10 @@
 package com.frudev.invoicing.service;
 import com.frudev.invoicing.dto.EventDto;
 import com.frudev.invoicing.dto.PaginatedDetailsDto;
+import com.frudev.invoicing.entity.AuctionEntity;
 import com.frudev.invoicing.entity.EventEntity;
 import com.frudev.invoicing.mapper.EventMapper;
+import com.frudev.invoicing.repository.AuctionRepository;
 import com.frudev.invoicing.repository.EventRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +15,11 @@ import java.util.UUID;
 @Service
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
+    private final AuctionRepository auctionRepository;
     private final EventMapper eventMapper;
-    public EventServiceImpl(EventRepository eventRepository, EventMapper eventMapper) {
+    public EventServiceImpl(EventRepository eventRepository, AuctionRepository auctionRepository, EventMapper eventMapper) {
         this.eventRepository = eventRepository;
+        this.auctionRepository = auctionRepository;
         this.eventMapper = eventMapper;
     }
     @Override
@@ -45,6 +49,11 @@ public class EventServiceImpl implements EventService {
         if (entity.getId() == null) {
             entity.setId(UUID.randomUUID());
         }
+        if (eventDto.auctionId() != null) {
+            AuctionEntity auction = auctionRepository.findById(eventDto.auctionId())
+                    .orElseThrow(() -> new RuntimeException("Auction not found with id: " + eventDto.auctionId()));
+            entity.setAuction(auction);
+        }
         EventEntity savedEntity = eventRepository.save(entity);
         return eventMapper.toDto(savedEntity);
     }
@@ -54,7 +63,13 @@ public class EventServiceImpl implements EventService {
         EventEntity existingEntity = eventRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
         eventMapper.updateEntityFromDto(eventDto, existingEntity);
-        existingEntity.setId(id);
+        if (eventDto.auctionId() != null) {
+            AuctionEntity auction = auctionRepository.findById(eventDto.auctionId())
+                    .orElseThrow(() -> new RuntimeException("Auction not found with id: " + eventDto.auctionId()));
+            existingEntity.setAuction(auction);
+        } else {
+            existingEntity.setAuction(null);
+        }
         EventEntity updatedEntity = eventRepository.save(existingEntity);
         return eventMapper.toDto(updatedEntity);
     }
@@ -70,7 +85,8 @@ public class EventServiceImpl implements EventService {
         if (search == null || search.isBlank()) return null;
         String pattern = "%" + search.toLowerCase() + "%";
         return (root, query, cb) -> cb.or(
-                cb.like(cb.lower(root.get("name")), pattern)
+                cb.like(cb.lower(root.get("auction").get("nameOfAuction")), pattern),
+                cb.like(cb.lower(root.get("description")), pattern)
         );
     }
 }

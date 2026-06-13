@@ -56,7 +56,7 @@ public class AuditTableListener {
             // Note: This is a simplified audit logging. 
             // In a real scenario, you'd want to capture oldValue/newValue using reflection or Hibernate Interceptors.
             jdbcTemplate.update(
-                "INSERT INTO AUDIT_LOGS (ID, ENTITY_NAME, ACTION, USER_NAME, CREATED_AT) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO wld_inv_audit_logs (ID, ENTITY_NAME, ACTION, USER_NAME, CREATED_AT) VALUES (?, ?, ?, ?, ?)",
                 UUID.randomUUID(), entityName, action, username, LocalDateTime.now()
             );
         } catch (Exception e) {

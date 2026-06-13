@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "PERMISSIONS")
+@Table(name = "wld_inv_permissions")
 public class PermissionEntity extends Auditable {
     @Id
     @Column(nullable = false, updatable = false)

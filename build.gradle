@@ -38,7 +38,7 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
 	/* ===== Database ===== */
-	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	/* ===== MapStruct ===== */
 	implementation 'org.mapstruct:mapstruct:1.6.2'

@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 
 public record EventDto(
         String id,
-        String name,
+        Long auctionId,
+        AuctionSimpleDto auction,
         String description,
-        LocalDateTime date,
         String location,
         String type,
         String status,

@@ -1,82 +1,77 @@
 package com.frudev.invoicing.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "EVENTS")
+@Table(name = "wld_inv_events")
 public class EventEntity extends Auditable {
     @Id
     @Column(nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "NAME")
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_id")
+    private AuctionEntity auction;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "DATE")
-    private LocalDateTime date;
-
-    @Column(name = "LOCATION")
+    @Column(name = "location")
     private String location;
 
-    @Column(name = "TYPE")
+    @Column(name = "type")
     private String type;
 
-    @Column(name = "STATUS")
+    @Column(name = "status")
     private String status;
 
-    @Column(name = "DEPOSIT_AMOUNT")
+    @Column(name = "deposit_amount")
     private BigDecimal depositAmount;
 
-    @Column(name = "SELLER")
+    @Column(name = "seller")
     private BigDecimal seller;
 
-    @Column(name = "SELLER_COMMISSION_TYPE")
+    @Column(name = "seller_commission_type")
     private Boolean sellerCommissionType;
 
-    @Column(name = "SELLER_AUCTION_FEE")
+    @Column(name = "seller_auction_fee")
     private BigDecimal sellerAuctionFee;
 
-    @Column(name = "SELLER_EVENT_FEE")
+    @Column(name = "seller_event_fee")
     private BigDecimal sellerEventFee;
 
-    @Column(name = "SELLER_CLUB_FEE")
+    @Column(name = "seller_club_fee")
     private BigDecimal sellerClubFee;
 
-    @Column(name = "SELLER_VETERINARY_FEE")
+    @Column(name = "seller_veterinary_fee")
     private BigDecimal sellerVeterinaryFee;
 
-    @Column(name = "SELLER_MARKETING_FEE")
+    @Column(name = "seller_marketing_fee")
     private BigDecimal sellerMarketingFee;
 
-    @Column(name = "BUYER")
+    @Column(name = "buyer")
     private BigDecimal buyer;
 
-    @Column(name = "BUYER_COMMISSION_TYPE")
+    @Column(name = "buyer_commission_type")
     private Boolean buyerCommissionType;
 
-    @Column(name = "BUYER_AUCTION_FEE")
+    @Column(name = "buyer_auction_fee")
     private BigDecimal buyerAuctionFee;
 
-    @Column(name = "BUYER_EVENT_FEE")
+    @Column(name = "buyer_event_fee")
     private BigDecimal buyerEventFee;
 
-    @Column(name = "BUYER_CLUB_FEE")
+    @Column(name = "buyer_club_fee")
     private BigDecimal buyerClubFee;
 
-    @Column(name = "BUYER_VETERINARY_FEE")
+    @Column(name = "buyer_veterinary_fee")
     private BigDecimal buyerVeterinaryFee;
 
-    @Column(name = "BUYER_MARKETING_FEE")
+    @Column(name = "buyer_marketing_fee")
     private BigDecimal buyerMarketingFee;
 
     public UUID getId() {
@@ -87,12 +82,12 @@ public class EventEntity extends Auditable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public AuctionEntity getAuction() {
+        return auction;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAuction(AuctionEntity auction) {
+        this.auction = auction;
     }
 
     public String getDescription() {
@@ -101,14 +96,6 @@ public class EventEntity extends Auditable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
     }
 
     public String getLocation() {

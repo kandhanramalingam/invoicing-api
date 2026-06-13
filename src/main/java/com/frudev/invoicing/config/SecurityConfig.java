@@ -62,7 +62,10 @@ public class SecurityConfig {
                     "/events/**",
                     "/permissions/**",
                     "/roles/**",
-                    "/users/**"
+                    "/users/**",
+                    "/auctions/**",
+                    "/sellers/**",
+                    "/lots/**"
             )
             .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

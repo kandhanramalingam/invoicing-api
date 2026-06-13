@@ -6,21 +6,21 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ROLES")
+@Table(name = "wld_inv_roles")
 public class RoleEntity extends Auditable {
     @Id
     @Column(nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "NAME", nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
 
     @ManyToMany
     @JoinTable(
-            name = "ROLE_PERMISSIONS",
-            joinColumns = @JoinColumn(name = "ROLE_ID"),
-            inverseJoinColumns = @JoinColumn(name = "PERMISSION_ID")
+            name = "wld_inv_role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<PermissionEntity> permissions = new HashSet<>();
 

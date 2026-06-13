@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "wld_inv_users")
 public class UserEntity extends Auditable {
     @Id
     @Column(nullable = false, updatable = false)
@@ -15,20 +15,20 @@ public class UserEntity extends Auditable {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "FULL_NAME")
+    @Column(name = "full_name")
     private String fullName;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "ACTIVE")
+    @Column(name = "active")
     private Integer active;
 
     @ManyToMany
     @JoinTable(
-            name = "USER_ROLES",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
+            name = "wld_inv_user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roles = new HashSet<>();
 
