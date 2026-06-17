@@ -1,5 +1,9 @@
 package com.frudev.invoicing.controller;
 
+import com.frudev.invoicing.dto.GroupedLotDto;
+import com.frudev.invoicing.dto.GroupedSellerLotDto;
+import com.frudev.invoicing.dto.LotDetailDto;
+import com.frudev.invoicing.dto.PaginatedDetailsDto;
 import com.frudev.invoicing.dto.ResponseDto;
 import com.frudev.invoicing.dto.UserDTO;
 import com.frudev.invoicing.entity.PermissionEntity;
@@ -9,9 +13,16 @@ import com.frudev.invoicing.mapper.UserMapper;
 import com.frudev.invoicing.repository.PermissionRepository;
 import com.frudev.invoicing.repository.RoleRepository;
 import com.frudev.invoicing.repository.UserRepository;
+import com.frudev.invoicing.service.AuctionService;
+import com.frudev.invoicing.service.LotService;
 import com.frudev.invoicing.utils.PasswordUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +47,12 @@ public class PublicController {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
     private final UserMapper userMapper;
+
+    @Autowired
+    private LotService lotService;
+
+    @Autowired
+    private AuctionService auctionService;
 
     public PublicController(UserRepository userRepository, RoleRepository roleRepository,
                             PermissionRepository permissionRepository, UserMapper userMapper) {
@@ -93,5 +110,49 @@ public class PublicController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDto<>(null, e.getMessage()));
         }
+    }
+
+    @GetMapping("/auctions")
+    public ResponseEntity<ResponseDto<PaginatedDetailsDto<?>>> getAuctions(
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "false") boolean lessDetails,
+            Pageable pageable) {
+        try {
+            PaginatedDetailsDto<?> auctions = auctionService.getAll(search, lessDetails, pageable);
+            return ResponseEntity.ok(new ResponseDto<>(auctions, "Auctions fetched successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto<>(null, e.getMessage()));
+        }
+    }
+
+    @GetMapping("/auctions/{auctionId}")
+    public ResponseEntity<ResponseDto<PaginatedDetailsDto<LotDetailDto>>> getLotsByAuctionId(
+            @PathVariable Integer auctionId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        PaginatedDetailsDto<LotDetailDto> lotDetails = lotService.getLotDetailsByAuctionId(auctionId, pageable);
+
+        return ResponseEntity.ok(new ResponseDto<>(lotDetails, "Lots fetched successfully"));
+    }
+
+    @GetMapping("/auctions/{auctionId}/groupByBuyer")
+    public ResponseEntity<ResponseDto<List<GroupedLotDto>>> getLotsGroupByBuyerByAuctionId(
+            @PathVariable Integer auctionId) {
+
+        List<GroupedLotDto> groupedLots = lotService.getLotDetailsGroupByBuyerByAuctionId(auctionId);
+
+        return ResponseEntity.ok(new ResponseDto<>(groupedLots, "Lots grouped by buyer fetched successfully"));
+    }
+
+    @GetMapping("/auctions/{auctionId}/groupBySeller")
+    public ResponseEntity<ResponseDto<List<GroupedSellerLotDto>>> getLotsGroupBySellerByAuctionId(
+            @PathVariable Integer auctionId) {
+
+        List<GroupedSellerLotDto> groupedLots = lotService.getLotDetailsGroupBySellerByAuctionId(auctionId);
+
+        return ResponseEntity.ok(new ResponseDto<>(groupedLots, "Lots grouped by seller fetched successfully"));
     }
 }
